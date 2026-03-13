@@ -8,6 +8,7 @@ use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ReportController; // Don't forget this!
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OverdueNotificationController;
+use App\Http\Controllers\UserLoanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,11 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::get('/my-loans', [UserLoanController::class, 'index'])->name('user.loans');
+    Route::post('/borrow', [UserLoanController::class, 'store'])->name('user.borrow');
+    Route::post('/my-loans', [UserLoanController::class, 'store'])->name('user.loans.store');
+
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])

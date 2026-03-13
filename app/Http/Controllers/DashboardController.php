@@ -10,21 +10,15 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index()
-    {
-        $totalBooks = Book::count();
-        $availableBooks = Book::sum('available_copies');
-        $totalMembers = Member::count();
-        $activeLoans = Loan::where('status', 'borrowed')->count();
-        $overdueLoans = Loan::where('status', 'borrowed')
-                            ->where('due_at', '<', now())
-                            ->count();
+{
+    $totalBooks = Book::count();
+    $availableBooks = Book::sum('available_copies');
+    $totalMembers = Member::count();
+    $activeLoans = Loan::where('status', 'borrowed')->count();
+    $overdueLoans = Loan::where('status', 'borrowed')->where('due_at', '<', now())->count();
 
-        return view('dashboard', compact(
-            'totalBooks',
-            'availableBooks',
-            'totalMembers',
-            'activeLoans',
-            'overdueLoans'
-        ));
-    }
+    $books = Book::all(); // for displaying available books to regular users
+
+    return view('dashboard', compact('totalBooks', 'availableBooks', 'totalMembers', 'activeLoans', 'overdueLoans', 'books'));
+}
 }

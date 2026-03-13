@@ -41,7 +41,7 @@ class ReportController extends Controller
         return Pdf::driver('dompdf')
             ->view('pdf.overdue-loans', compact('overdueLoans'))
             ->format('A4')
-            ->name('overdue-loans-'.now()->format('Y-m-d').'.pdf');
+            ->download('overdue-loans-'.now()->format('Y-m-d').'.pdf');
     }
 
     /**
@@ -57,6 +57,6 @@ class ReportController extends Controller
         return Pdf::driver('dompdf')
             ->view('pdf.borrowed-books', compact('borrowedBooks'))
             ->format('A4')
-            ->name('borrowed-books-'.now()->format('Y-m-d').'.pdf');
+            ->download('borrowed-books-'.now()->format('Y-m-d').'.pdf');
     }
 }

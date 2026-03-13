@@ -10,19 +10,12 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-            </div>
-
-            <!-- Navigation Links -->
+              <!-- Navigation Links -->
 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
         {{ __('Dashboard') }}
     </x-nav-link>
+@if(auth()->user()->role === 'admin')
     <x-nav-link :href="route('books.index')" :active="request()->routeIs('books.*')">
         {{ __('Books') }}
     </x-nav-link>
@@ -33,8 +26,13 @@
         {{ __('Loans') }}
     </x-nav-link>
     <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')">
-    {{ __('Reports') }}
-</x-nav-link>
+        {{ __('Reports') }}
+    </x-nav-link>
+@else
+    <x-nav-link :href="route('user.loans')" :active="request()->routeIs('user.loans')">
+        {{ __('My Loans') }}
+    </x-nav-link>
+@endif
 </div>
 
             <!-- Settings Dropdown -->

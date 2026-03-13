@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use App\Models\Member;
+
 
 class RegisteredUserController extends Controller
 {
@@ -41,6 +43,14 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'member', // default role
+        ]);
+
+        Member::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => null, // or you can add a phone field to registration form
+            'address' => null,
+            'membership_start' => now(),
         ]);
 
         event(new Registered($user));
