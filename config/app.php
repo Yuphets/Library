@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'overdue_fine_per_day' => env('OVERDUE_FINE_PER_DAY', 5),
+
 ];

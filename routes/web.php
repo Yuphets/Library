@@ -7,6 +7,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ReportController; // Don't forget this!
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OverdueNotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+    Route::prefix('reports')->name('reports.')->group(function () {
+    Route::get('/', [ReportController::class, 'index'])->name('index');
+    Route::get('/overdue-pdf', [ReportController::class, 'overdueLoansPdf'])->name('overdue.pdf');
+    Route::get('/borrowed-pdf', [ReportController::class, 'borrowedBooksPdf'])->name('borrowed.pdf');
+});
+
     // Profile (from Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -40,14 +47,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('members', MemberController::class);
         Route::resource('loans', LoanController::class);
 
+        Route::post('/overdue/send-notifications', [OverdueNotificationController::class, 'sendNotifications'])
+    ->name('overdue.send')
+    ->middleware(['auth', 'role:admin']);
+
         // Custom return route for loans
         Route::put('/loans/{loan}/return', [LoanController::class, 'returnBook'])
             ->name('loans.return');
-
-        // Report PDF
-        Route::get('/reports/overdue-pdf', [ReportController::class, 'overdueLoansPdf'])
-    ->name('reports.overdue')          // <-- name must be exactly 'reports.overdue'
-    ->middleware(['auth', 'role:admin']);
     });
 });
 

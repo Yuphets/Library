@@ -15,9 +15,14 @@ class RoleMiddleware
      */
     public function handle($request, Closure $next, $role)
 {
-    if (auth()->check() && auth()->user()->role == $role) {
+    if (auth()->check() && auth()->user()->role === $role) {
         return $next($request);
     }
+
+    // Optionally allow multiple roles, e.g., 'admin' or 'librarian'
+    // $allowedRoles = explode('|', $role);
+    // if (auth()->check() && in_array(auth()->user()->role, $allowedRoles)) { ... }
+
     abort(403, 'Unauthorized action.');
 }
 }

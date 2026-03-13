@@ -12,7 +12,8 @@ class MemberController extends Controller
      */
     public function index()
     {
-        //
+        $members = Member::all();
+        return view('members.index', compact('members'));
     }
 
     /**
@@ -20,7 +21,7 @@ class MemberController extends Controller
      */
     public function create()
     {
-        //
+        return view('members.create');
     }
 
     /**
@@ -28,7 +29,18 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:members,email',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'membership_start' => 'nullable|date',
+        ]);
+
+        Member::create($validated);
+
+        return redirect()->route('members.index')
+            ->with('success', 'Member created successfully.');
     }
 
     /**
@@ -36,7 +48,8 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        //
+        // Optional: show individual member details
+        return view('members.show', compact('member'));
     }
 
     /**
@@ -44,7 +57,7 @@ class MemberController extends Controller
      */
     public function edit(Member $member)
     {
-        //
+        return view('members.edit', compact('member'));
     }
 
     /**
@@ -52,7 +65,18 @@ class MemberController extends Controller
      */
     public function update(Request $request, Member $member)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:members,email,' . $member->id,
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'membership_start' => 'nullable|date',
+        ]);
+
+        $member->update($validated);
+
+        return redirect()->route('members.index')
+            ->with('success', 'Member updated successfully.');
     }
 
     /**
@@ -60,6 +84,9 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
-        //
+        $member->delete();
+
+        return redirect()->route('members.index')
+            ->with('success', 'Member deleted successfully.');
     }
 }

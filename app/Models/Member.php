@@ -2,13 +2,38 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
-    //
+    use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'address',
+        'membership_start',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'membership_start' => 'date',
+    ];
+
+    // Define relationships if any (e.g., loans)
     public function loans()
-{
-    return $this->hasMany(Loan::class);
-}
+    {
+        return $this->hasMany(Loan::class);
+    }
 }

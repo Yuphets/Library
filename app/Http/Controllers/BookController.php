@@ -20,9 +20,15 @@ class BookController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        //
-    }
+{
+    return view('books.create');
+}
+
+public function edit(Book $book)
+{
+    return view('books.edit', compact('book'));
+}
+
 
     /**
      * Store a newly created resource in storage.
@@ -30,18 +36,17 @@ class BookController extends Controller
     public function store(Request $request)
 {
     $validated = $request->validate([
-        'title' => 'required',
-        'author' => 'required',
-        'isbn' => 'required|unique:books',
+        'title' => 'required|string|max:255',
+        'author' => 'required|string|max:255',
+        'isbn' => 'required|string|unique:books,isbn',
+        'publication_year' => 'nullable|integer|min:1800|max:' . date('Y'),
         'total_copies' => 'required|integer|min:1',
-        // other fields
     ]);
 
     $validated['available_copies'] = $validated['total_copies'];
-
     Book::create($validated);
 
-    return redirect()->route('books.index')->with('success', 'Book created.');
+    return redirect()->route('books.index')->with('success', 'Book added successfully.');
 }
 
     /**
@@ -55,24 +60,36 @@ class BookController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Book $book)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Book $book)
-    {
-        //
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'author' => 'required|string|max:255',
+        'isbn' => 'required|string|unique:books,isbn,' . $book->id,
+        'publication_year' => 'nullable|integer|min:1800|max:' . date('Y'),
+        'total_copies' => 'required|integer|min:1',
+    ]);
+
+    // Ensure available_copies doesn't exceed new total_copies
+    if ($validated['total_copies'] < $book->available_copies) {
+        return back()->withErrors(['total_copies' => 'Total copies cannot be less than currently available copies.']);
     }
+
+    $book->update($validated);
+
+    return redirect()->route('books.index')->with('success', 'Book updated successfully.');
+}
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Book $book)
-    {
-        //
-    }
+{
+    $book->delete();
+    return redirect()->route('books.index')->with('success', 'Book deleted successfully.');
+}
 }

@@ -11,4 +11,17 @@ class Book extends Model
 {
     return $this->hasMany(Loan::class);
 }
+
+protected $fillable = [
+    'title',
+    'author',
+    'isbn',
+    'publication_year',
+    'total_copies',
+    'available_copies',
+];
+
+protected $casts = [
+    'publication_year' => 'integer',
+];
 }

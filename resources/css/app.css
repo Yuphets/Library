@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.bg-mdc-blue { background-color: #003A6B; }
+.text-mdc-blue { color: #003A6B; }
+.border-mdc-blue { border-color: #003A6B; }

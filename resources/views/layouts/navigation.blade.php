@@ -32,9 +32,9 @@
     <x-nav-link :href="route('loans.index')" :active="request()->routeIs('loans.*')">
         {{ __('Loans') }}
     </x-nav-link>
-    <x-nav-link :href="route('reports.overdue')" :active="request()->routeIs('reports.*')">
-        {{ __('Reports') }}
-    </x-nav-link>
+    <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')">
+    {{ __('Reports') }}
+</x-nav-link>
 </div>
 
             <!-- Settings Dropdown -->
